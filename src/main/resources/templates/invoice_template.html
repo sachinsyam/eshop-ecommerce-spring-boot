@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv='Content-Type' content='text/html; charset=us-ascii'>
+    <title></title>
+</head>
+<body style='font-family:Tahoma;font-size:12px;color: #333333;background-color:#FFFFFF;'>
+<table align='center' border='0' cellpadding='0' cellspacing='0' style='height:842px; width:595px;font-size:12px;'>
+    <tr>
+        <td valign='top'>
+            <h2>Tax Invoice/Bill of Supply/Cash Memo</h2>
+            <table width='100%' cellspacing='0' cellpadding='0'>
+                <tr>
+                    <td valign='bottom' width='50%' height='50'>
+                        <div align='left'><img src='/home/sac/IdeaProjects/eShop/src/main/resources/static/images/icons/logo-01.png' width="150px" alt="logo-01"></div><br>
+                        <span><i>Ph:788746878 email: support@eshop.com</i></span>
+                    </td>
+                    <td width='50%'>Sold By : STARK INDUSTRIES LIMITED * Renaissance Industrial smart City, Kalyan Sape Road, Vashere village, Amane post,, Bhiwandi taluka, Thane disctrict Thane, Maharashtra, 421302 IN</td>
+                </tr>
+            </table>
+            <hr>
+            Billing Address :<br>
+            <br>
+            <table width='100%' cellspacing='0' cellpadding='0'>
+                <tr>
+                    <td valign='top' width='40%' style='font-size:12px;'>
+                        <strong>{{name}}</strong><br>
+                        {{flat}}, {{area}}<br>
+                        {{town}}, {{city}}<br>
+                        {{state}}, {{pin}}<br>
+                        <p>{{phone}}</p>
+                        <p>{{email}}</p>
+                    </td>
+                    <td valign='top' width='20%'></td>
+                    <td valign='top' width='40%' style='font-size:12px;'>Invoice Date: {{orderDate}}<br>
+                        Invoice # {{orderId}}<br></td>
+                </tr>
+            </table>
+            <table id="orderItemsTable" width='100%' cellspacing='0' cellpadding='2' border='1' bordercolor='#CCCCCC'>
+                <tr>
+                    <td width='35%' bordercolor='#ccc' bgcolor='#F2F2F2' style='font-size:12px; text-align: center;'><strong>Description</strong></td>
+                    <td bordercolor='#ccc' bgcolor='#F2F2F2' style='font-size:12px; text-align: center;'><strong>Qty</strong></td>
+                    <td bordercolor='#ccc' bgcolor='#F2F2F2' style='font-size:12px; text-align: center;'><strong>Unit Price</strong></td>
+                    <td bordercolor='#ccc' bgcolor='#F2F2F2' style='font-size:12px; text-align: center;'><strong>Subtotal</strong></td>
+                </tr>
+                {{orderItemsRows}}
+
+            </table>
+            <table width='100%' cellspacing='0' cellpadding='2' border='0'>
+                <tr>
+                    <td style='font-size:12px;width:50%;'></td>
+                    <td>
+                        <table width='100%' cellspacing='0' cellpadding='2' border='0'>
+                            <tr>
+                                <td align='right' style='font-size:12px;'>Subtotal (INR)</td>
+                                <td align='right' style='font-size:12px;'>{{subTotal}}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td align='right' style='font-size:12px;'>TAX(18%) (INR)</td>
+                                <td align='right' style='font-size:12px;'>{{tax}}</td>
+                            </tr>
+                            <tr>
+                                <td align='right' style='font-size:12px;'>Discount (INR)</td>
+                                <td align='right' style='font-size:12px;'>-{{discount}}</td>
+                            </tr>
+                            <tr>
+                                <td align='right' style='font-size:14px;'><b>Total (INR)</b></td>
+                                <td align='right' style='font-size:14px;'><b>{{gross}}</b></td>
+                            </tr>
+                            <tr align='right' style='font-size:12px;'>
+                                <td>Authorized Signature:</td>
+                                <td><br>
+                                    <img src='/src/main/resources/templates/signature.png' width="150px" alt="signature"></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <table width='100%' height='50'>
+                <tr>
+                    <td style='font-size:12px;text-align:justify;'>Payment Details</td>
+                </tr>
+                <tr>
+                    <td style='font-size:12px;text-align:justify;'>Type: {{type}}</td>
+                </tr>
+                <tr>
+                    <td style='font-size:12px;text-align:justify;'>{{onlineRef}}</td>
+                </tr>
+            </table>
+            <hr>
+            <p>"Thank you for your business! If you have any questions or concerns regarding this invoice, please contact our customer support at support@eshop.com or call us at 788746878. We appreciate your prompt payment.</p>
+            <p>Invoice generated on {{generatedDate}}</p>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Product</title>
+</head>
+<body>
+    <h1>Add Product</h1>
+    <form action="#" th:action="@{/products}" method="post">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"></textarea>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="variants">
+                <tr th:each="variant, status : ${variants}" th:object="${variant}">
+                    <td><input type="text" th:field="*{name}" required></td>
+                    <td><input type="number" th:field="*{price}" min="0" required></td>
+                    <td><input type="number" th:field="*{stock}" min="0" required></td>
+                    <td><button type="button" onclick="removeRow(this)">Remove</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button type="button" onclick="addRow()">Add Variant</button>
+
+        <button type="submit">Save</button>
+    </form>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        function addRow() {
+            var table = document.getElementById("variants");
+            var row = table.insertRow(-1);
+            var name = row.insertCell(0);
+            var price = row.insertCell(1);
+            var stock = row.insertCell(2);
+            var remove = row.insertCell(3);
+            name.innerHTML = '<input type="text" name="variants[__${variants.size()}__].name" required>';
+            price.innerHTML = '<input type="number" name="variants[__${variants.size()}__].price" min="0" required>';
+            stock.innerHTML = '<input type="number" name="variants[__${variants.size()}__].stock" min="0" required>';
+            remove.innerHTML = '<button type="button" onclick="removeRow(this)">Remove</button>';
+        }
+
+        function removeRow(button) {
+            var row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+        /*]]>*/
+    </script>
+</body>
+</html>

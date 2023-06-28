@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!-- Normalize CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+  <!-- Cropper CSS -->
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css'>
+  <!-- Cropper JS -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js'></script>
+
+  <meta charset="UTF-8"/>
+  <title>Product Details</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+  <style>
+      #images {
+    overflow-x: auto;
+    white-space: initial;
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+
+  #images > div {
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+
+<!--  crop-->
+  .page {
+	margin: 1em auto;
+	max-width: 768px;
+	display: flex;
+	align-items: flex-start;
+	flex-wrap: wrap;
+	height: 100%;
+}
+
+.box {
+	padding: 0.5em;
+	width: 100%;
+	margin: 0.5em;
+}
+
+.box-2 {
+	padding: 0.5em;
+	width: calc(100%/2 - 1em);
+}
+
+.options label,
+.options input {
+	width: 4em;
+	padding: 0.5em 1em;
+}
+
+.hide {
+	display: none;
+}
+
+img {
+	max-width: 100%;
+}
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="d-flex justify-content-end">
+    <a type="button" href="/product/all" class="btn btn-primary mt-3">Back</a>
+  </div>
+  <h1>Product Details</h1>
+  <form th:object="${product}" th:action="@{/product/update(multipart=true)}" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="pUuid">ID:</label>
+      <input type="text" class="form-control" id="pUuid" name="productUuid" th:value="${product.uuid}"  readonly="readonly" />
+    </div>
+
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input type="text" class="form-control editable-field" id="name" name="name" th:value="${product.name}" disabled="disabled" />
+    </div>
+    <div class="form-group">
+      <label for="description">Description:</label>
+      <textarea class="form-control editable-field" id="description" name="description" th:text="${product.description}"  rows="10" disabled="disabled"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="category">Category:</label>
+      <select class="form-control editable-field" id="category" name="categoryUuid" disabled="disabled">
+        <option th:each="category : ${categories}" th:value="${category.uuid}" th:text="${category.name}" th:selected="${product.category.uuid == category.uuid}"></option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Images:</label>
+      <div id="images" style="white-space: nowrap;">
+        <div  th:each="image : ${product.images}" th:id="'image-' + ${image.uuid}" class="d-inline-block mr-1">
+          <img  th:src="@{|/uploads/${image.fileName}|}" style="width: 200px;"
+                th:with="path='/home/sac/IdeaProjects/eShop/src/main/resources/static/' + ${'uploads/' + image.fileName}"/>
+          <a  class="btn btn-sm btn-danger editable-field"  hidden="hidden" href="#" th:attr="onclick='deleteImage(event, \'' + ${image.uuid} + '\')'">X</a>
+        </div>
+
+        <input type="hidden" name="imagesToRemove" value="">
+
+      </div>
+    </div>
+
+
+<!--    <div class="form-group editable-field" hidden="hidden">-->
+<!--      <label for="newimage">Image(s):</label>-->
+<!--      <input type="file" id="newimage" name="newImages" multiple class="form-control-file" onchange="handleImageUpload(event)">-->
+<!--    </div>-->
+
+    <!-- input file -->
+    <div class="editable-field" hidden="hidden">
+
+      <div class="form-check">
+        <input onchange="radioChange()" class="form-check-input" type="radio" name="flexRadioDefault" id="radioMultiple" checked>
+        <label class="form-check-label" for="radioMultiple">
+          Upload Multiple Images
+        </label>
+      </div>
+      <div class="form-check">
+        <input onchange="radioChange()" class="form-check-input" type="radio" name="flexRadioDefault" id="radioCrop">
+        <label class="form-check-label" for="radioCrop">
+          Crop an Image and Upload
+        </label>
+      </div>
+
+<!--      for single cropped image-->
+      <input hidden="hidden" class="form-control" name="newImages" type="file" id="file-input">
+<!--      for uncropped multiple images-->
+      <input multiple class="form-control" name="newImages" type="file" id="multiple-file-input">
+
+    </div>
+    <!-- leftbox -->
+    <div class="box-2">
+      <div class="result"></div>
+    </div>
+    <!--rightbox-->
+    <div class="box-2 img-result hide">
+      <!-- result of crop -->
+      <img class="cropped" src="" alt="">
+    </div>
+    <!-- input file -->
+    <div class="box">
+      <div class="options hide" hidden="hidden">
+        <label> Width</label>
+        <input type="number" class="img-w" value="600" min="100" max="1200" />
+      </div>
+      <!-- save btn -->
+      <button id="saveCropBtn" class="btn btn-success save hide">Save Cropped Image</button>
+      <!-- download btn -->
+      <a href="" class="btn download hide">Download</a>
+    </div>
+
+
+
+    <div class="form-group">
+      <button hidden="hidden" type="button" class="btn btn-primary mt-1" id="add-image-btn" onclick="addImage()" style="display:none">Add Image</button>
+      <button type="submit" class="btn btn-success mt-1 editable-field" id="save-btn" style="display:none">Save</button>
+      <button type="button" class="btn btn-warning mt-1 editable-field" id="cancel-btn" onclick="window.location.reload()" style="display:none">Cancel</button>
+      <button type="button" class="btn btn-primary mt-1" id="edit-btn" onclick="enableEdit()">Edit</button>
+      <button type="button" class="btn btn-primary mt-1" id="stock-btn" onclick="location.href='/variant/all'">Update Stock</button>
+    </div>
+  </form>
+</div>
+
+<script src="/js/image-crop.js"></script>
+
+
+</body>
+</html>

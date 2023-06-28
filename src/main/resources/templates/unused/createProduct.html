@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="ISO-8859-1">
+  <title>Create Product</title>
+  <!--    <link th:href="@{/assets/css/style.css}" rel="stylesheet">-->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+        crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</head>
+<style>
+
+</style>
+<body>
+
+
+<div class="container">
+<h2 class="mt-4">Create Product</h2>
+  <form th:action="@{/product/create}" th:object="${Product}"  method="post" class="row g-3 needs-validation" novalidate>
+   
+    <div class="col-md-4">
+      <label for="validationCustom01" class="form-label">Name</label>
+      <input type="text" name="name" class="form-control" id="validationCustom01" required>
+      <div class="valid-feedback">
+        Looks good!
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <label for="validationCustom01" class="form-label">Description</label>
+      <textarea name="description"  id="description" required class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+      <div class="valid-feedback">
+        Looks good!
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <label for="validationCustom01" class="form-label">Category</label>
+      <input type="text" name="category" class="form-control" id="Category" required>
+      <div class="valid-feedback">
+        Looks good!
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <label for="validationCustom01" class="form-label">Brand</label>
+      <input type="text" name="brand" class="form-control" id="brand" required>
+      <div class="valid-feedback">
+        Looks good!
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <label for="validationCustom01" class="form-label">Variant Name</label>
+      <input type="text" name="variant" class="form-control" id="variant" required>
+      <div class="valid-feedback">
+        Looks good!
+      </div>
+    </div>
+
+
+    <div class="col-md-12">
+      <h3>Product Variants</h3>
+   
+
+    
+    <table>
+      <thead>
+          <tr>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th></th>
+          </tr>
+      </thead>
+      <tbody id="variants">
+          <tr th:each="variant, status : ${variants}" th:object="${variant}">
+              <td><input class="form-control"  type="text" th:field="*{name}" required></td>
+              <td><input class="form-control"  type="number" th:field="*{price}" min="0" required></td>
+              <td><input class="form-control"  type="number" th:field="*{stock}" min="0" required></td>
+              <td><button class="btn btn-danger" type="button" onclick="removeRow(this)">Remove</button></td>
+          </tr>
+      </tbody>
+    </table>
+
+    <button class="btn btn-primary mt-3 " type="button" onclick="addRow()">Add Variant</button>
+
+    <div class="col-12">
+      <button class="btn btn-primary mt-3" type="submit">Create Product</button>
+    </div>
+    </div>
+  </form>
+
+
+
+
+
+</div>
+</body>
+<script>
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+(function () {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  var forms = document.querySelectorAll('.needs-validation')
+
+  // Loop over them and prevent submission
+  Array.prototype.slice.call(forms)
+    .forEach(function (form) {
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+
+        form.classList.add('was-validated')
+      }, false)
+    })
+})()
+
+  /*<![CDATA[*/
+        function addRow() {
+            var table = document.getElementById("variants");
+            var row = table.insertRow(-1);
+            var name = row.insertCell(0);
+            var price = row.insertCell(1);
+            var stock = row.insertCell(2);
+            var remove = row.insertCell(3);
+            name.innerHTML = '<input class="form-control"  type="text" name="variants[__${variants.size()}__].name" required>';
+            price.innerHTML = '<input class="form-control"  type="number" name="variants[__${variants.size()}__].price" min="0" required>';
+            stock.innerHTML = '<input class="form-control"  type="number" name="variants[__${variants.size()}__].stock" min="0" required>';
+            remove.innerHTML = '<button  class="btn btn-danger"  type="button" onclick="removeRow(this)">Remove</button>';
+        }
+
+        function removeRow(button) {
+            var row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+        /*]]>*/
+
+</script>
+</html>

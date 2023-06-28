@@ -1,0 +1,244 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Signup</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<style>
+    body {
+        color: #fff;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .form-control {
+        height: 40px;
+        box-shadow: none;
+        color: #969fa4;
+    }
+
+    .form-control:focus {
+        border-color: #5cb85c;
+    }
+
+    .form-control,
+    .btn {
+        border-radius: 3px;
+    }
+
+    .signup-form {
+        max-width: 450px;
+        margin: 0 auto;
+        padding: 30px 15px;
+        font-size: 15px;
+    }
+
+    .signup-form h2 {
+        color: #636363;
+        margin: 0 0 15px;
+        position: relative;
+        text-align: center;
+    }
+
+    .signup-form h2:before,
+    .signup-form h2:after {
+        content: "";
+        height: 2px;
+        width: 30%;
+        background: #d4d4d4;
+        position: absolute;
+        top: 50%;
+        z-index: 2;
+    }
+
+    .signup-form h2:before {
+        left: 0;
+    }
+
+    .signup-form h2:after {
+        right: 0;
+    }
+
+    .signup-form .hint-text {
+        color: #999;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .signup-form .error-text {
+        color: #e40808;
+        margin-bottom: 30px;
+        text-align: center;
+        font-weight: 700;
+    }
+
+    .signup-form form {
+        color: #999;
+        border-radius: 3px;
+        margin-bottom: 15px;
+        background: #f2f3f7;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        padding: 30px;
+    }
+
+    .signup-form .form-group {
+        margin-bottom: 20px;
+    }
+
+    .signup-form input[type="checkbox"] {
+        margin-top: 3px;
+    }
+
+    .signup-form .btn {
+        font-size: 16px;
+        font-weight: bold;
+        min-width: 140px;
+        outline: none !important;
+    }
+
+    .signup-form .row div:first-child {
+        padding-right: 10px;
+    }
+
+    .signup-form .row div:last-child {
+        padding-left: 10px;
+    }
+
+    .signup-form a {
+        color: #fff;
+        text-decoration: underline;
+    }
+
+    .signup-form a:hover {
+        text-decoration: none;
+    }
+
+    .signup-form form a {
+        color: #5cb85c;
+        text-decoration: none;
+    }
+
+    .signup-form form a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<body>
+<div class="signup-form">
+    <form th:action="@{/app/registerUser}" th:object="${userInfo}" method="post">
+        <h2>Register</h2>
+        <p class="hint-text">Create your account.</p>
+
+        <div th:if="${signupError == 'username'}">
+            <p class="text-danger">An user already exists with the same username.</p>
+            <a href="/resetPassword">Forgot Password?</a>
+        </div>
+
+        <div th:if="${signupError == 'email'}">
+            <p class="text-danger">An user already exists with the same email.</p>
+            <a href="/resetPassword">Forgot Password?</a>
+        </div>
+
+        <div th:if="${signupError == 'phone'}">
+            <p class="text-danger">An user already exists with the same phone.</p>
+            <a href="/resetPassword">Forgot Password?</a>
+        </div>
+
+        <p id="errorMsg" hidden class="error-text">Please enter all fields</p>
+        <p id="errorMsg2" hidden class="error-text">Invalid character found in username/password</p>
+        <div class="form-group">
+            <div class="row">
+                <div class="col">
+                    <input oninput="validate()" id="firstName" type="text" class="form-control"
+                           name="firstName" placeholder="First Name" required="required">
+                </div>
+                <div class="col">
+                    <input oninput="validate()" id="lastName" type="text" class="form-control" name="lastName"
+                           placeholder="Last Name" required="required">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <input oninput="validate()" type="text" class="form-control" id="username" name="username"
+                   placeholder="Username" required="required">
+        </div>
+
+        <div class="form-group">
+            <input oninput="validate()" type="email" class="form-control" name="email" placeholder="Email"
+                   required="required">
+        </div>
+
+        <div class="form-group">
+            <input oninput="validate()" type="tel" class="form-control" name="phone" placeholder="Phone"
+                   required="required">
+        </div>
+
+        <div class="form-group">
+            <input type="password" oninput="validate()" class="form-control" name="password"
+                   placeholder="Password" required="required" id="pass1">
+        </div>
+
+        <div class="form-group">
+            <input type="password" oninput="validate()" class="form-control" name="confirm_password"
+                   placeholder="Confirm Password" required="required" id="pass2">
+        </div>
+
+        <div class="form-group">
+            <button disabled id="registerButton" type="submit" value="UserInfo"
+                    class="col-12 btn btn-success btn-lg btn-block">Register</button>
+        </div>
+    </form>
+    <div class="text-center">Already have an account? <a href="/login">Sign in</a></div>
+</div>
+</body>
+
+<script>
+    function validateRegrex(text) {
+        // letters, numbers, underscores, and periods.
+        const usernameRegex = /^[a-z0-9_.]+$/;
+        return usernameRegex.test(text);
+    }
+
+    function validate() {
+        const pass1 = document.getElementById("pass1").value;
+        const pass2 = document.getElementById("pass2").value;
+        const firstName = document.getElementById("firstName").value;
+        const lastName = document.getElementById("lastName").value;
+        const username = document.getElementById("username").value;
+        const registerBtn = document.getElementById("registerButton");
+        const errorMsg = document.getElementById("errorMsg");
+        const errorMsg2 = document.getElementById("errorMsg2");
+
+        console.log(username + validateRegrex(username));
+        console.log(name + validateRegrex(name));
+        console.log(pass1 + validateRegrex(pass1));
+
+        if (
+            pass1 != pass2 ||
+            pass1 == "" ||
+            pass2 == "" ||
+            firstName == "" ||
+            lastName == "" ||
+            username == ""
+        ) {
+            console.log("First Validation Failed");
+            registerBtn.disabled = true;
+            errorMsg.hidden = false;
+        } else if (!validateRegrex(username) || !validateRegrex(pass1)) {
+            console.log("Second Validation Failed");
+            registerBtn.disabled = true;
+            errorMsg2.hidden = false;
+        } else {
+            console.log("Third Validation Passed");
+            registerBtn.disabled = false;
+            errorMsg.hidden = true;
+        }
+    }
+</script>
+
+</html>

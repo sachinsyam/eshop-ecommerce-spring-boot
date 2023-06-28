@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Banner Details</title>
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+            crossorigin="anonymous"></script>
+
+
+
+    <script>
+
+
+
+
+
+
+
+
+    function enableEdit() {
+      var fields = document.getElementsByClassName("editable-field");
+      for (var i = 0; i < fields.length; i++) {
+        fields[i].disabled = false;
+        fields[i].hidden = false;
+      }
+      document.getElementById("add-image-btn").style.display = "block";
+      document.getElementById("save-btn").style.display = "block";
+      document.getElementById("cancel-btn").style.display = "block";
+      document.getElementById("edit-btn").style.display = "none";
+
+
+    }
+
+
+
+
+</script>
+</head>
+<body>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form  th:action="@{/banner/delete}" th:object="${banner}"  method="post">
+                <div class="modal-body">
+                    <p>Are you sure that you want to delete the banner?</p>
+                    <p name="bannerModal" th:text="${name}"></p>
+                    <input hidden th:value="${uuid}" name="uuid" type="text" class="form-control" placeHolder="Id">
+
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button  type="submit" value="CategoryInfo"  class="btn btn-danger">Delete</button>
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+
+
+<div class="container">
+    <div class="d-flex justify-content-end">
+        <a type="button" href="/banner/all" class="btn btn-primary m-1">Banner List</a>
+        <button type="button" class="btn btn-primary m-1" id="edit-btn" onclick="enableEdit()">Edit</button>
+        <button  data-bs-toggle="modal" data-bs-target="#exampleModal" hidden id="deleteBtn" type="button" class="btn btn-danger m-1 editable-field">Delete</button>
+
+
+    </div>
+
+    <h1>Banner Details</h1>
+    <form th:object="${banner}" th:action="@{/banner/update(multipart=true)}" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="pUuid">ID:</label>
+            <input type="text" class="form-control" id="pUuid" name="bannerUuid" th:value="${banner.uuid}"  readonly="readonly" />
+        </div>
+
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control editable-field" id="name" name="name" th:value="${banner.name}" disabled="disabled" />
+        </div>
+
+        <div class="form-group">
+            <label for="product">Product Name:</label>
+            <select class="form-control editable-field" id="product" name="productUuid" disabled="disabled">
+                <option th:each="product : ${products}" th:value="${product.uuid}" th:text="${product.name}" th:selected="${banner.product.uuid == product.uuid}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="description1">Description 1:</label>
+            <input type="text" class="form-control editable-field" id="description1" name="description1" th:value="${banner.description1}" disabled="disabled" />
+        </div>
+
+        <div class="form-group">
+            <label for="description2">Description 2:</label>
+            <input type="text" class="form-control editable-field" id="description2" name="description2" th:value="${banner.description2}" disabled="disabled" />
+        </div>
+
+        <div class="form-group">
+            <label for="description3">Description 3:</label>
+            <input type="text" class="form-control editable-field" id="description3" name="description3" th:value="${banner.description3}" disabled="disabled" />
+        </div>
+
+
+
+        <div class="form-group">
+            <label>Image:</label>
+            <div id="bannerFile" style="white-space: nowrap;">
+                <div class="d-inline-block mr-1">
+                    <img th:if="${banner.bannerFile}" th:src="@{|/uploads/${banner.bannerFile}|}" style="width: 600px;"
+                         th:with="path='/home/sac/IdeaProjects/eShop/src/main/resources/static/' + ${'uploads/' + banner.bannerFile}"/>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="form-group editable-field mt-2" hidden="hidden">
+            <label for="newimage">Image:</label>
+            <input type="file" id="newimage" name="bannerImage" class="form-control-file">
+        </div>
+
+
+        <!-- <div id="form-group" hidden="hidden">
+          <div  th:each="image : ${banner.images}" th:id="'oldImage-' +${image.uuid}">
+            <input type="text" class="editable-field" name="oldImages" th:value="${image.uuid}" disabled="disabled" />
+          </div>
+        </div> -->
+
+        <div class="form-group">
+            <button hidden="hidden" type="button" class="btn btn-primary mt-2" id="add-image-btn" onclick="addImage()" style="display:none">Add Image</button>
+            <button type="submit" class="btn btn-success mt-2 editable-field" id="save-btn" style="display:none">Save</button>
+            <button type="button" class="btn btn-warning mt-1 editable-field" id="cancel-btn" onclick="window.location.reload()" style="display:none">Cancel</button>
+<!--            <button type="button" class="btn btn-primary mt-1" id="edit-btn" onclick="enableEdit()">Edit</button>-->
+
+
+        </div>
+    </form>
+</div>
+
+
+
+
+</body>
+</html>

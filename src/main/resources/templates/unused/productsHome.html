@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Product List</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="/js/js-image-zoom.js"></script>
+
+</head>
+<body>
+
+<div class="container mt-3">
+  <h2>Product List</h2>
+  <div class="row mt-3">
+    <div th:each="product : ${products}" class="col-md-4">
+      <div class="card mb-4 box-shadow">
+        <div id="img-container-__${stat.index}__">
+
+        <img  style="width:200px" th:src="@{|/uploads/${product.images[0].fileName}|}" class="card-img-top img-container img-fluid" alt="Product Image">
+        </div>
+        <div class="card-body">
+          <h5 class="card-title" th:text="${product.name}"></h5>
+          <p class="card-text" th:text="${product.variants[0].sellingPrice}"></p>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="btn-group">
+              <a th:href="@{|/products/${product.uuid}|}" class="btn btn-sm btn-outline-secondary">View</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.bundle.min.js}"></script>
+
+<script>
+var options1 = {
+    width: 400,
+    zoomWidth: 500,
+    offset: {vertical: 0, horizontal: 10}
+};
+
+// If the width and height of the image are not known or to adjust the image to the container of it
+var options2 = {
+    fillContainer: true,
+    offset: {vertical: 0, horizontal: 10}
+};
+
+var images = document.querySelectorAll(".img-container");
+
+images.forEach(function(image) {
+    new ImageZoom(image.querySelector("#img-container"), options2);
+});
+
+
+</script>
+</body>
+</html>

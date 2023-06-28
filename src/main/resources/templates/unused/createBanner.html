@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Create Banner</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+</head>
+<body>
+<div class="container mt-3">
+  <h1>Create Banner</h1>
+  <form method="post" enctype="multipart/form-data" th:action="@{/banner/save}">
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required class="form-control" th:value="${banner.name}">
+    </div>
+
+    <div class="form-group">
+      <label for="description1">Description 1:</label>
+      <input type="text" class="form-control editable-field" id="description1" name="description1" th:value="${banner.description1}" disabled="disabled" />
+    </div>
+
+    <div class="form-group">
+      <label for="description2">Description 2:</label>
+      <input type="text" class="form-control editable-field" id="description2" name="description2" th:value="${banner.description2}" disabled="disabled" />
+    </div>
+
+    <div class="form-group">
+      <label for="description3">Description 3:</label>
+      <input type="text" class="form-control editable-field" id="description3" name="description3" th:value="${banner.description3}" disabled="disabled" />
+    </div>
+
+
+
+    <div class="form-group">
+      <label for="product">Product:</label>
+      <select id="product" name="productUuid" class="form-control" required="required">
+        <option value="" selected="selected" disabled="disabled">Select a product</option>
+        <th:block th:each="product : ${products}">
+          <option th:value="${product.uuid}" th:text="${product.name}"></option>
+        </th:block>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="image">Image:</label>
+      <input type="file" id="image" name="bannerImage" class="form-control-file">
+    </div>
+    <button type="submit" class="btn btn-primary">Create Banner</button>
+  </form>
+</div>
+
+
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNS"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
