@@ -1,7 +1,7 @@
 # eshop-ecommerce-spring-boot
 
 This is an eCommerce app built on Spring Boot 2.7.11, Thymeleaf, and MySQL. It provides various features for an online store.
-You can find the screenshots of the app [here](https://ibb.co/album/8MJC8G).
+You can find the screenshots of the app [here](https://postimg.cc/gallery/W0wRwsJ).
 
 ## Features
 
