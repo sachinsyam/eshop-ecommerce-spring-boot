@@ -92,7 +92,3 @@ The app was hosted on a GCP VM.
 7. Access the application by navigating to `http://localhost:8080` in your web browser.
 
 8. Follow the provided instructions or refer to the [API documentation](https://documenter.getpostman.com/view/1164234/2s93ecvVYj) to explore and interact with the eCommerce app.
-
-Remember to include any additional instructions specific to your project or any prerequisites that need to be installed/configured before running the application.
-
-Ensure that you have properly documented the SQL credentials in the `application.properties` file to ensure others can set up the application successfully with their own database.
