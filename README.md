@@ -46,6 +46,8 @@ The app integrates with the following services:
 - Twilio for SMS OTP.
 - Razorpay for the payment gateway.
 - GeoIP to fetch IP details.
+- html2pdf
+- itextpdf
 
 ## Templates
 
